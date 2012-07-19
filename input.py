@@ -17,8 +17,8 @@ from txws import WebSocketFactory # pip install txws
 class EchoUpper(Protocol):
     """Echo uppercased."""
     def dataReceived(self, data):
-        log.msg("Got %r" % (data,))
-        self.transport.write(data.upper())
+        #log.msg("Got %r" % (data,))
+        self.transport.write(data)
 
 application = Application("ws-streamer")
 
