@@ -10,9 +10,10 @@ $(document).ready(function() {
 
         // show server response
         socket.onmessage = function(e) {
-            x = e.data.split(',')[0];
-            y = e.data.split(',')[1];
-            $("#output").text(move_cursor(x,y));
+            //x = e.data.split(',')[0];
+            //y = e.data.split(',')[1];
+            //$("#output").text(move_cursor(x,y));
+           $("#output").text(e.data) 
         }
         var init_x = null;
         var init_y = null;
@@ -20,6 +21,7 @@ $(document).ready(function() {
         var init_curs_y = null;
 
         $("#test").mousedown(function(e){
+            socket.send('start_record');
             $("#test").mousemove(function(e){
                 var x = e.pageX - this.offsetLeft;
                 var y = e.pageY - this.offsetTop;
@@ -29,7 +31,7 @@ $(document).ready(function() {
                 };
                 offset_x = x - init_x ;
                 offset_y = y - init_y;
-                socket.send(offset_x +','+ offset_y);
+                socket.send('track:'+ offset_x +','+ offset_y);
             });
         });
 
@@ -39,6 +41,7 @@ $(document).ready(function() {
             init_y = null;
             init_curs_x = null;
             init_curs_y = null;
+            socket.send('stop_record')
         });
 
         function move_cursor(x,y){
