@@ -19,9 +19,31 @@ $(document).ready(function() {
         var init_y = null;
         var init_curs_x = null;
         var init_curs_y = null;
+        var obj = document.getElementById('test');
+        document.addEventListener('touchmove', function(event) {
+            alert('Touched')
+        // If there's exactly one finger inside this element
+        if (event.targetTouches.length == 1) {
+            var touch = event.targetTouches[0];
+            // Place element where the finger is
+            //obj.style.left = touch.pageX + 'px';
+            //obj.style.top = touch.pageY + 'px';
+                var x = touch.pageX - this.offsetLeft;
+                var y = touch.pageY - this.offsetTop;
+                if (!init_x || !init_y){
+                    init_x = x;
+                    init_y = y;
+                };
+                offset_x = x - init_x ;
+                offset_y = y - init_y;
+                socket.send('move:'+ offset_x +','+ offset_y);
+
+        }
+        }, false); 
 
         $("#test").mousedown(function(e){
-            socket.send('start_record');
+            //socket.send('start_record');
+            //alert('recording')
             $("#test").mousemove(function(e){
                 var x = e.pageX - this.offsetLeft;
                 var y = e.pageY - this.offsetTop;
@@ -31,7 +53,7 @@ $(document).ready(function() {
                 };
                 offset_x = x - init_x ;
                 offset_y = y - init_y;
-                socket.send('track:'+ offset_x +','+ offset_y);
+                socket.send('move:'+ offset_x +','+ offset_y);
             });
         });
 
@@ -41,7 +63,7 @@ $(document).ready(function() {
             init_y = null;
             init_curs_x = null;
             init_curs_y = null;
-            socket.send('stop_record')
+            //socket.send('stop_record')
         });
 
         function move_cursor(x,y){
